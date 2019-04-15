@@ -3,7 +3,9 @@ package com.github.shichi18.rssreader
 
 import android.app.LoaderManager
 import android.content.Loader
+import android.net.Uri
 import android.os.Bundle
+import android.support.customtabs.CustomTabsIntent
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -29,6 +31,8 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Rss> {
 
             val adapter = ArticlesAdapter(this, data.articles) { article ->
                 //記事をタップした時の処理
+                val intent =CustomTabsIntent.Builder().build()
+                intent.launchUrl(this, Uri.parse(article.link))
             }
 
             recyclerView.adapter = adapter
