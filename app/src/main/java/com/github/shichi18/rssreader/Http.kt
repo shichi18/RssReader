@@ -5,7 +5,7 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-fun hettpGet(url: String): InputStream? {
+fun httpGet(url: String): InputStream? {
     //通信接続用のオブジェクト生成
     val con = URL(url).openConnection() as HttpURLConnection
 
@@ -21,7 +21,7 @@ fun hettpGet(url: String): InputStream? {
     con.connect()
 
     //ステータスコード
-    if (con.responseCode in 200..299){
+    if (con.responseCode in 200..299) {
         //成功したらレスポンスの入力ストリームをBufferedInputStreamとして返す
         return BufferedInputStream(con.inputStream)
     }

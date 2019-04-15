@@ -1,12 +1,46 @@
 package com.github.shichi18.rssreader
 
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
 
-class MainActivity : AppCompatActivity() {
+import android.app.LoaderManager
+import android.content.Loader
+import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.RecyclerView
+
+class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Rss> {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // ローダーを呼び出す
+        loaderManager.initLoader(1, null, this)
+
     }
+
+
+    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Rss> = RssLoader(this)
+
+    override fun onLoadFinished(loader: Loader<Rss>, data: Rss?) {
+
+        if (data != null) {
+            val recyclerView = findViewById<RecyclerView>(R.id.articles)
+
+            val adapter = ArticlesAdapter(this, data.articles) { article ->
+                //記事をタップした時の処理
+            }
+
+            recyclerView.adapter = adapter
+
+            val layoutManager = GridLayoutManager(this, 2)
+            recyclerView.layoutManager = layoutManager
+        }
+
+    }
+
+    override fun onLoaderReset(loader: Loader<Rss>) {
+    }
+
+
 }

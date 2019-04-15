@@ -1,5 +1,7 @@
 package com.github.shichi18.rssreader
 
+import android.content.AsyncTaskLoader
+import android.content.Context
 import org.w3c.dom.NodeList
 import java.io.InputStream
 import java.text.SimpleDateFormat
@@ -17,9 +19,8 @@ data class Rss(val title: String, val pubDate: Date, val articles: List<Article>
 //RSSをパースする
 
 fun parseRss(stream: InputStream): Rss {
-    //xmlをDomに変換
-    val doc = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-        .parse(stream)
+    // XMLをDOMオブジェクトに変換する
+    val doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(stream)
     stream.close()
 
     //Xpathを生成
@@ -43,7 +44,7 @@ fun parseRss(stream: InputStream): Rss {
             pubDate = formatter.parse(xPath.evaluate("./pubDate/text()", item))
         )
         articles.add(article)
-        
+
     }
 
     //RSSオブジェクトをまとめて返す
@@ -52,4 +53,45 @@ fun parseRss(stream: InputStream): Rss {
         pubDate = formatter.parse(xPath.evaluate("/rss/channel/pubDate/text()", doc)),
         articles = articles
     )
+}
+
+//ローダ用
+class RssLoader(context: Context) : AsyncTaskLoader<Rss>(context) {
+
+    private var cache: Rss? = null
+
+    override fun loadInBackground(): Rss? {
+
+        val response = httpGet("https://www.sbbit.jp/rss/HotTopics.rss")
+
+        if (response != null) {
+            return parseRss(response)
+        }
+        return null
+    }
+
+    override fun deliverResult(data: Rss?) {
+        if (isReset || data == null) return
+        cache = data
+        super.deliverResult(data)
+    }
+
+    override fun onStartLoading() {
+        if (cache != null) {
+            deliverResult(cache)
+        }
+        if (takeContentChanged() || cache == null) {
+            forceLoad()
+        }
+    }
+
+    override fun onStopLoading() {
+        cancelLoad()
+    }
+
+    override fun onReset() {
+        super.onReset()
+        onStopLoading()
+        cache = null
+    }
 }
