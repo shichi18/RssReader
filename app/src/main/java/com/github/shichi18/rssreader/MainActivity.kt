@@ -25,7 +25,8 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Rss> {
 
         createChannel(this)
         val fetchJob = JobInfo.Builder(
-            1, ComponentName(this,PollingJob::class.java))
+            1, ComponentName(this, PollingJob::class.java)
+        )
             .setPeriodic(TimeUnit.HOURS.toMillis(6))//6h
             .setPersisted(true)
             .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Rss> {
 
             val adapter = ArticlesAdapter(this, data.articles) { article ->
                 //記事をタップした時の処理
-                val intent =CustomTabsIntent.Builder().build()
+                val intent = CustomTabsIntent.Builder().build()
                 intent.launchUrl(this, Uri.parse(article.link))
             }
 

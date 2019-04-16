@@ -28,10 +28,11 @@ fun createChannel(context: Context) {
     manager.createNotificationChannel(channel)
 }
 
-fun notifyUpdate(context: Context){
-    val intent = Intent(context,MainActivity::class.java)
+fun notifyUpdate(context: Context) {
+    val intent = Intent(context, MainActivity::class.java)
     val pendingIntent = PendingIntent.getActivity(
-        context, REQUEST_CODE,intent,PendingIntent.FLAG_ONE_SHOT)
+        context, REQUEST_CODE, intent, PendingIntent.FLAG_ONE_SHOT
+    )
 
     //通知
     val notification = NotificationCompat.Builder(context, CHANNEL_ID)
@@ -39,10 +40,11 @@ fun notifyUpdate(context: Context){
         .setContentText("新しい記事をチェックしましょう")
         .setContentIntent(pendingIntent)
         .setSmallIcon(R.drawable.ic_notification)
-            
+
         .setAutoCancel(true)
         .build()
 
     NotificationManagerCompat.from(context).notify(
-        NOTIFICATION_ID,notification)
+        NOTIFICATION_ID, notification
+    )
 }
