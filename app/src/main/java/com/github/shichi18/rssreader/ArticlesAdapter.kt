@@ -12,8 +12,7 @@ class ArticlesAdapter(
     private val context: Context,
     private val articles: List<Article>,
     private val onArticleClicked: (Article) -> Unit
-) :
-    RecyclerView.Adapter<ArticlesAdapter.ArticleViewHolder>() {
+) : RecyclerView.Adapter<ArticlesAdapter.ArticleViewHolder>() {
     override fun getItemCount() = articles.size
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
