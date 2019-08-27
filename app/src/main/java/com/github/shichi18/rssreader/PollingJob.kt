@@ -11,7 +11,7 @@ class PollingJob : JobService() {
 
     override fun onStartJob(params: JobParameters?): Boolean {
         Thread {
-            val response = httpGet("https://www.sbbit.jp/rss/HotTopics.rss")
+            val response = httpGet("https://martinfowler.com/feed.atom")
             if (response != null) {
                 val rss = parseRss(response)
                 val prefs = getSharedPreferences("pref_polling", Context.MODE_PRIVATE)
