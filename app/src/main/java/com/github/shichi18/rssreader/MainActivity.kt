@@ -10,7 +10,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import java.util.concurrent.TimeUnit
@@ -52,15 +51,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Rss> {
             }
 
             recyclerView.adapter = adapter
-
             val layoutManager = GridLayoutManager(this, 2)
-
-            //区切り線
-            var itemDecoration: RecyclerView.ItemDecoration
-            itemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-            recyclerView.addItemDecoration(itemDecoration)
-            itemDecoration = DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL)
-            recyclerView.addItemDecoration(itemDecoration)
             recyclerView.layoutManager = layoutManager
         }
 
