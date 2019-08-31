@@ -18,7 +18,7 @@ class ArticlesAdapter(
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
         val article = articles[position]
         holder.title.text = article.title
-        holder.pubDate.text = context.getString(R.string.pubDate, article.pubDate)
+        holder.pubDate.text = context.getString(R.string.pubDate, article.updated)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
@@ -38,7 +38,7 @@ class ArticlesAdapter(
 
 
     class ArticleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val title = view.findViewById<TextView>(R.id.title)
-        val pubDate = view.findViewById<TextView>(R.id.pubDate)
+        val title: TextView = view.findViewById(R.id.title)
+        val pubDate: TextView = view.findViewById(R.id.pubDate)
     }
 }

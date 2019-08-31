@@ -5,6 +5,7 @@ import android.app.job.JobService
 import android.content.Context
 
 class PollingJob : JobService() {
+
     override fun onStopJob(params: JobParameters?): Boolean {
         return false
     }
@@ -16,13 +17,11 @@ class PollingJob : JobService() {
                 val rss = parseRss(response)
                 val prefs = getSharedPreferences("pref_polling", Context.MODE_PRIVATE)
                 val lastFetchTime = prefs.getLong("last_publish_time", 0L)
-                if (lastFetchTime > 0 && lastFetchTime < rss.pubDate.time) {
+                if (lastFetchTime > 0 && lastFetchTime < rss.updated.time) {
                     notifyUpdate(this)//通知
                 }
-
-                prefs.edit().putLong("last_publish_time", rss.pubDate.time).apply()
+                prefs.edit().putLong("last_publish_time", rss.updated.time).apply()
             }
-
         }.start()
         return true
     }
