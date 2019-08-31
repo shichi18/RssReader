@@ -51,7 +51,6 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Rss> {
             }
 
             recyclerView.adapter = adapter
-
             val layoutManager = GridLayoutManager(this, 2)
             recyclerView.layoutManager = layoutManager
         }

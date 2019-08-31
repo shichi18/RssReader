@@ -11,46 +11,41 @@ import javax.xml.xpath.XPathConstants
 import javax.xml.xpath.XPathFactory
 
 //Rssの各記事を表すデータクラス
-data class Article(val title: String, val link: String, val pubDate: Date)
+data class Article(val title: String, val link: String, val updated: Date)
 
 //RSSを表現するデータクラス
-data class Rss(val title: String, val pubDate: Date, val articles: List<Article>)
+data class Rss(val title: String, val updated: Date, val articles: List<Article>)
 
-//RSSをパースする
-
+//RSSをパース
 fun parseRss(stream: InputStream): Rss {
-    // XMLをDOMオブジェクトに変換する
+
+    // XML->DOMオブジェクトに変換
     val doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(stream)
     stream.close()
-
     //Xpathを生成
     val xPath = XPathFactory.newInstance().newXPath()
-
-    //日付
-    val formatter = SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US)
-
-    //チャンネル内の<item>
-    val items = xPath.evaluate("/rss/channel/item", doc, XPathConstants.NODESET) as NodeList
-
+    //日付(ex:2019-08-27T10:04:00-04:00)
+    val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.ENGLISH)
+    //feed内の<entry>
+    val entries = xPath.evaluate("/feed/entry", doc, XPathConstants.NODESET) as NodeList
     //RSS記事一覧
     val articles = arrayListOf<Article>()
 
-    for (i in 0 until items.length) {
-        val item = items.item(i)
+    for (i in 0 until entries.length) {
+        val item = entries.item(i)
 
         val article = Article(
             title = xPath.evaluate("./title/text()", item),
-            link = xPath.evaluate("./link/text()", item),
-            pubDate = formatter.parse(xPath.evaluate("./pubDate/text()", item))
+            link = xPath.evaluate("./link/@href", item),
+            updated = formatter.parse(xPath.evaluate("./updated/text()", item))
         )
         articles.add(article)
 
     }
-
     //RSSオブジェクトをまとめて返す
     return Rss(
-        title = xPath.evaluate("/rss/channel/title/text()", doc),
-        pubDate = formatter.parse(xPath.evaluate("/rss/channel/pubDate/text()", doc)),
+        title = xPath.evaluate("/feed/entry/title/text()", doc),
+        updated = formatter.parse(xPath.evaluate("/feed/entry/updated/text()", doc)),
         articles = articles
     )
 }
@@ -61,9 +56,7 @@ class RssLoader(context: Context) : AsyncTaskLoader<Rss>(context) {
     private var cache: Rss? = null
 
     override fun loadInBackground(): Rss? {
-
-        val response = httpGet("https://www.sbbit.jp/rss/HotTopics.rss")
-
+        val response = httpGet("https://martinfowler.com/feed.atom")
         if (response != null) {
             return parseRss(response)
         }
