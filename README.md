@@ -1,6 +1,6 @@
 # RssReader
 【Independent production】  
-This is an RssReader app that has acquired update information from "https://martinfowler.com/".
+This is an RssReader app that has acquired update information from "https://martinfowler.com/".  
 This app was created with reference and improvement to the sample code in the book.  
 
 ## Date
