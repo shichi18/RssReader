@@ -12,7 +12,7 @@ Update Date：2019/9/1
 Update information of "https://martinfowler.com/" is acquired.
 
 ### screenshot
-![rssreader01](https://github.com/shichi18/imagestore/blob/master/rssreader/rssreader01.png)
+<img src="https://github.com/shichi18/imagestore/blob/master/rssreader/rssreader01.png" width=30%>
 
 ## Development Environment
 Programming Language：Kotlin  
